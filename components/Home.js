@@ -40,12 +40,12 @@ function Home() {
   const [moviesData, setMoviesData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://mymovizbackend-one.vercel.app/movies")
       .then((response) => response.json())
       .then((data) => {
-        console.log("⭐⭐⭐⭐", data.movies.results);
+        console.log("⭐⭐⭐⭐", data.movies);
         const newMovies = [];
-        for (let movie of data.movies.results) {
+        for (let movie of data.movies) {
           let overview = movie.overview;
           if (overview.length > 250) {
             overview = overview.substring(0, 250) + "...";
