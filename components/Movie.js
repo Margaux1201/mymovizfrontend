@@ -4,42 +4,26 @@ import { faHeart, faStar, faVideo } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/Movie.module.css";
 
 function Movie(props) {
-  const [watchCount, setWatchCount] = useState(0);
-  const [personalNote, setPersonalNote] = useState(0);
+  const [watchCount, setWatchCount] = useState(0); // Compteur de visionnages
+  const [personalNote, setPersonalNote] = useState(0); // Evaluation personnelle
 
-  // Average evaluation
+  // Création de 10 étoiles pour la note du film
   const stars = [];
   for (let i = 0; i < 10; i++) {
     let style = {};
     if (i < props.voteAverage - 1) {
+      // Si l'indice de l'étoile est inférieur à la note moyenne, on la colore en jaune
       style = { color: "#f1c40f" };
     }
     stars.push(<FontAwesomeIcon key={i} icon={faStar} style={style} />);
   }
 
-  // Watch movie
-  const handleWatchMovie = () => {
-    setWatchCount(watchCount + 1);
-  };
-  let videoIconStyle = { cursor: "pointer" };
-  if (watchCount > 0) {
-    videoIconStyle = { color: "#e74c3c", cursor: "pointer" };
-  }
-
-  // Like movie
-  const handleLikeMovie = () => {
-    props.updateLikedMovies(props.title);
-  };
-  let heartIconStyle = { cursor: "pointer" };
-  if (props.isLiked) {
-    heartIconStyle = { color: "#e74c3c", cursor: "pointer" };
-  }
-
-  // Personal note
+  // Création de 10 étoiles CLIQUABLES pour la note personnelle
   const personalStars = [];
   for (let i = 0; i < 10; i++) {
     let style = { cursor: "pointer" };
     if (i < personalNote) {
+      // Si l'indice de l'étoile est inférieur à la note personnelle, on la colore en bleu
       style = { color: "#2196f3", cursor: "pointer" };
     }
     personalStars.push(
@@ -51,6 +35,26 @@ function Movie(props) {
         className="note"
       />
     );
+  }
+
+  // Fonction pour compter le nombre de visionnages
+  const handleWatchMovie = () => {
+    setWatchCount(watchCount + 1);
+  };
+  let videoIconStyle = { cursor: "pointer" };
+  if (watchCount > 0) {
+    // Si le film a été visionné au moins une fois, on change la couleur de l'icône caméra en rouge
+    videoIconStyle = { color: "#e74c3c", cursor: "pointer" };
+  }
+
+  // Fonction pour ajouter ou retirer le film des favoris
+  const handleLikeMovie = () => {
+    props.updateLikedMovies(props.title);
+  };
+  let heartIconStyle = { cursor: "pointer" };
+  if (props.isLiked) {
+    // Si le film est dans les favoris, on change la couleur de l'icône cœur en rouge
+    heartIconStyle = { color: "#e74c3c", cursor: "pointer" };
   }
 
   return (
