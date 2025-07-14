@@ -69,8 +69,18 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	width: 200px;
+}
+
+.likedMovie {
+	flex: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-right: 10px;
 }
 
 .crossIcon {
 	cursor: pointer;
+	margin-right: 10px;
 }

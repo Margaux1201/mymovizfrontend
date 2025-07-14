@@ -7,49 +7,22 @@ import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
 
 function Home() {
-  const [likedMovies, setLikedMovies] = useState([]);
+  const [likedMovies, setLikedMovies] = useState([]); // État pour les films favoris
+  const [moviesData, setMoviesData] = useState([]); // État pour les données des films
 
-  // Liked movies (inverse data flow)
-  const updateLikedMovies = (movieTitle) => {
-    if (likedMovies.find((movie) => movie === movieTitle)) {
-      setLikedMovies(likedMovies.filter((movie) => movie !== movieTitle));
-    } else {
-      setLikedMovies([...likedMovies, movieTitle]);
-    }
-  };
-
-  const likedMoviesPopover = likedMovies.map((data, i) => {
-    return (
-      <div key={i} className={styles.likedMoviesContainer}>
-        <span className="likedMovie">{data}</span>
-        <FontAwesomeIcon
-          icon={faCircleXmark}
-          onClick={() => updateLikedMovies(data)}
-          className={styles.crossIcon}
-        />
-      </div>
-    );
-  });
-
-  const popoverContent = (
-    <div className={styles.popoverContent}>{likedMoviesPopover}</div>
-  );
-
-  // Movies list
-
-  const [moviesData, setMoviesData] = useState([]);
-
+  // Récupération des films au chargement (Mount) du composant
   useEffect(() => {
-    fetch("https://mymovizbackend-one.vercel.app/movies")
+    fetch("http://localhost:3000/movies")
       .then((response) => response.json())
       .then((data) => {
-        console.log("⭐⭐⭐⭐", data.movies);
         const newMovies = [];
         for (let movie of data.movies) {
+          // Limiter la longueur de l'aperçu à 250 caractères
           let overview = movie.overview;
           if (overview.length > 250) {
             overview = overview.substring(0, 250) + "...";
           }
+          // Création d'un objet movie avec les données nécessaires
           const newMovie = {
             title: movie.title,
             poster: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`,
@@ -63,14 +36,26 @@ function Home() {
       });
   }, []);
 
-  console.log("🙈🙈🙈🙈", moviesData);
+  // Fonction pour ajouter ou supprimer un film des favoris (inverse dataflow avec Movie.js)
+  const updateLikedMovies = (movieTitle) => {
+    if (likedMovies.find((movie) => movie === movieTitle)) {
+      // Si le film est déjà dans les favoris, on le supprime
+      setLikedMovies(likedMovies.filter((movie) => movie !== movieTitle));
+    } else {
+      // Si le film n'est pas dans les favoris, on l'ajoute
+      setLikedMovies([...likedMovies, movieTitle]);
+    }
+  };
 
+  // Affichage des films récupérés au Mount du composant
   const movies = moviesData.map((data, i) => {
+    // Vérifie si le film est dans les favoris
     const isLiked = likedMovies.some((movie) => movie === data.title);
+
     return (
       <Movie
         key={i}
-        updateLikedMovies={updateLikedMovies}
+        updateLikedMovies={updateLikedMovies} // Fonction pour ajouter ou supprimer un film des favoris
         isLiked={isLiked}
         title={data.title}
         overview={data.overview}
@@ -80,6 +65,27 @@ function Home() {
       />
     );
   });
+
+  // Affichage des titres des films favoris dans le popover
+  const likedMoviesPopover = likedMovies.map((data, i) => {
+    return (
+      <div key={i} className={styles.likedMoviesContainer}>
+        {/* Titre du film */}
+        <div className="likedMovie">{data}</div>
+        {/* Bouton pour supprimer le film des favoris */}
+        <FontAwesomeIcon
+          icon={faCircleXmark}
+          onClick={() => updateLikedMovies(data)} // Fonction pour ajouter ou supprimer un film des favoris
+          className={styles.crossIcon}
+        />
+      </div>
+    );
+  });
+
+  // Contenu du popover avec les films favoris
+  const popoverContent = (
+    <div className={styles.popoverContent}>{likedMoviesPopover}</div>
+  );
 
   return (
     <div className={styles.main}>
@@ -94,10 +100,12 @@ function Home() {
           className={styles.popover}
           trigger="click"
         >
+          {/* Compteur de films en favoris sur le bouton */}
           <Button>♥ {likedMovies.length} movie(s)</Button>
         </Popover>
       </div>
       <div className={styles.title}>LAST RELEASES</div>
+      {/* Affichage des films */}
       <div className={styles.moviesContainer}>{movies}</div>
     </div>
   );
