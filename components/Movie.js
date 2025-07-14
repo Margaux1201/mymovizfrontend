@@ -65,7 +65,7 @@ function Movie(props) {
         src={props.poster}
         alt={props.title}
         width={220}
-        height={300}
+        height={350}
       />
       <div className={styles.textContainer}>
         <div>

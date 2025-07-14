@@ -99,6 +99,8 @@ function Home() {
           content={popoverContent}
           className={styles.popover}
           trigger="click"
+          placement="bottom"
+          overlayStyle={{ marginTop: "10px", zIndex: 2000 }}
         >
           {/* Compteur de films en favoris sur le bouton */}
           <Button>♥ {likedMovies.length} movie(s)</Button>
