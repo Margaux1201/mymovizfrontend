@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faStar, faVideo } from "@fortawesome/free-solid-svg-icons";
 import styles from "../styles/Movie.module.css";
+import Image from "next/image";
 
 function Movie(props) {
   const [watchCount, setWatchCount] = useState(0); // Compteur de visionnages
@@ -59,7 +60,13 @@ function Movie(props) {
 
   return (
     <div className={styles.card}>
-      <img className={styles.image} src={props.poster} alt={props.title} />
+      <Image
+        className={styles.image}
+        src={props.poster}
+        alt={props.title}
+        width={220}
+        height={300}
+      />
       <div className={styles.textContainer}>
         <div>
           <span className={styles.name}>{props.title}</span>
