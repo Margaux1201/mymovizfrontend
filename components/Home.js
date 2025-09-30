@@ -12,7 +12,7 @@ function Home() {
 
   // Récupération des films au chargement (Mount) du composant
   useEffect(() => {
-    fetch("http://localhost:3000/movies")
+    fetch("https://mymovizbackend-one.vercel.app/movies")
       .then((response) => response.json())
       .then((data) => {
         const newMovies = [];
